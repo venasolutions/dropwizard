@@ -7,7 +7,7 @@
 
     <groupId>com.yammer.dropwizard</groupId>
     <artifactId>dropwizard-parent</artifactId>
-    <version>0.6.2</version>
+    <version>0.6.2-vena</version>
     <packaging>pom</packaging>
     <name>Dropwizard Project</name>
     <url>http://dropwizard.codahale.com/</url>
@@ -80,6 +80,7 @@
         </repository>
     </repositories>
 
+<!--
     <distributionManagement>
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
@@ -96,7 +97,20 @@
             <url>scp://codahale.com/home/codahale/dropwizard.codahale.com/maven/</url>
         </site>
     </distributionManagement>
-
+-->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>vena-ext-snapshot-local</id>
+            <name>Vena Artifactory External Libs Snapshots</name>
+            <url>http://build.venasolutions.com:8081/artifactory/simple/ext-snapshot-local/</url>
+        </snapshotRepository>
+        <repository>
+            <id>vena-ext-release-local</id>
+            <name>Vena Artifactory External Libs Release</name>
+            <url>http://build.venasolutions.com:8081/artifactory/simple/ext-release-local/</url>
+        </repository>
+       
+    </distributionManagement>
     <profiles>
         <profile>
             <id>release-sign-artifacts</id>
