@@ -7,7 +7,7 @@
 
     <groupId>com.yammer.dropwizard</groupId>
     <artifactId>dropwizard-parent</artifactId>
-    <version>0.6.2-vena-4</version>
+    <version>0.6.2-vena-7</version>
     <packaging>pom</packaging>
     <name>Dropwizard Project</name>
     <url>http://dropwizard.codahale.com/</url>
