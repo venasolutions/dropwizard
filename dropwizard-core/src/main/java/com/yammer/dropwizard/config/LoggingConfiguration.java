@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.yammer.dropwizard.validation.ValidationMethod;
 
@@ -34,6 +35,10 @@ public class LoggingConfiguration {
 
         @JsonProperty
         private String logFormat;
+        
+        @JsonProperty
+        private ImmutableList<String> filters = ImmutableList.of();
+
 
         public boolean isEnabled() {
             return enabled;
@@ -66,6 +71,14 @@ public class LoggingConfiguration {
         public void setLogFormat(String logFormat) {
             this.logFormat = logFormat;
         }
+        
+        public ImmutableList<String> getFilters() {
+    		return filters;
+    	}
+
+    	public void setFilters(ImmutableList<String> filters) {
+    		this.filters = filters;
+    	}
     }
 
     public static class FileConfiguration {
@@ -96,6 +109,9 @@ public class LoggingConfiguration {
 
         @JsonProperty
         private String logFormat;
+        
+        @JsonProperty
+        private ImmutableList<String> filters = ImmutableList.of();
 
         @ValidationMethod(message = "must have logging.file.archivedLogFilenamePattern if logging.file.archive is true")
         public boolean isValidArchiveConfiguration() {
@@ -169,7 +185,16 @@ public class LoggingConfiguration {
 
         public void setLogFormat(String logFormat) {
             this.logFormat = logFormat;
+       
         }
+        
+        public ImmutableList<String> getFilters() {
+    		return filters;
+    	}
+
+    	public void setFilters(ImmutableList<String> filters) {
+    		this.filters = filters;
+    	}
     }
 
     public static class SyslogConfiguration {
@@ -210,6 +235,9 @@ public class LoggingConfiguration {
 
         @JsonProperty
         private String logFormat;
+        
+        @JsonProperty
+        private ImmutableList<String> filters = ImmutableList.of();
 
         public boolean isEnabled() {
             return enabled;
@@ -258,6 +286,14 @@ public class LoggingConfiguration {
         public void setLogFormat(String logFormat) {
             this.logFormat = logFormat;
         }
+        
+        public ImmutableList<String> getFilters() {
+    		return filters;
+    	}
+
+    	public void setFilters(ImmutableList<String> filters) {
+    		this.filters = filters;
+    	}
     }
 
     @NotNull
@@ -299,7 +335,7 @@ public class LoggingConfiguration {
         this.loggers = ImmutableMap.copyOf(loggers);
     }
 
-    public ConsoleConfiguration getConsoleConfiguration() {
+	public ConsoleConfiguration getConsoleConfiguration() {
         return console;
     }
 

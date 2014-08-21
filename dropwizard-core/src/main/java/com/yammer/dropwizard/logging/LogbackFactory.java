@@ -7,11 +7,13 @@ import ch.qos.logback.classic.net.SyslogAppender;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
+import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.rolling.DefaultTimeBasedFileNamingAndTriggeringPolicy;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.spi.FilterAttachable;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 
 import static com.yammer.dropwizard.config.LoggingConfiguration.*;
 
@@ -28,6 +30,9 @@ public class LogbackFactory {
         appender.setSyslogHost(syslog.getHost());
         appender.setFacility(syslog.getFacility().toString());
         addThresholdFilter(appender, syslog.getThreshold());
+        
+        if( syslog.getFilters() != null )
+        	addExtraFilters(appender, syslog.getFilters());
 
         for (String format : logFormat.asSet()) {
             appender.setSuffixPattern(format);
@@ -38,7 +43,7 @@ public class LogbackFactory {
         return appender;
     }
 
-    public static FileAppender<ILoggingEvent> buildFileAppender(FileConfiguration file,
+	public static FileAppender<ILoggingEvent> buildFileAppender(FileConfiguration file,
                                                                        LoggerContext context,
                                                                        Optional<String> logFormat) {
         final LogFormatter formatter = new LogFormatter(context, file.getTimeZone());
@@ -58,6 +63,9 @@ public class LogbackFactory {
         appender.setPrudent(false);
 
         addThresholdFilter(appender, file.getThreshold());
+        
+        if( file.getFilters() != null )
+        	addExtraFilters(appender, file.getFilters());
 
         if (file.isArchive()) {
 
@@ -99,6 +107,10 @@ public class LogbackFactory {
         appender.setContext(context);
         appender.setLayout(formatter);
         addThresholdFilter(appender, console.getThreshold());
+        
+        if( console.getFilters() != null )
+        	addExtraFilters(appender, console.getFilters());
+        
         appender.start();
 
         return appender;
@@ -110,4 +122,19 @@ public class LogbackFactory {
         filter.start();
         appender.addFilter(filter);
     }
+    
+    private static void addExtraFilters(FilterAttachable<ILoggingEvent> appender, ImmutableList<String> filters) {
+		for(String filterClassStr : filters) {			;
+			try {
+				Class clazz = Class.forName(filterClassStr);
+				Filter filter = (Filter) clazz.newInstance();
+				filter.start();
+				appender.addFilter(filter);
+			} catch(Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
 }
