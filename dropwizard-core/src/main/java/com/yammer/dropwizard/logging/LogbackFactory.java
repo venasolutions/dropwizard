@@ -29,10 +29,11 @@ public class LogbackFactory {
         appender.setContext(context);
         appender.setSyslogHost(syslog.getHost());
         appender.setFacility(syslog.getFacility().toString());
-        addThresholdFilter(appender, syslog.getThreshold());
         
         if( syslog.getFilters() != null )
         	addExtraFilters(appender, syslog.getFilters());
+
+        addThresholdFilter(appender, syslog.getThreshold());
 
         for (String format : logFormat.asSet()) {
             appender.setSuffixPattern(format);
@@ -62,10 +63,10 @@ public class LogbackFactory {
         appender.setFile(file.getCurrentLogFilename());
         appender.setPrudent(false);
 
-        addThresholdFilter(appender, file.getThreshold());
-        
         if( file.getFilters() != null )
         	addExtraFilters(appender, file.getFilters());
+
+        addThresholdFilter(appender, file.getThreshold());
 
         if (file.isArchive()) {
 
@@ -106,10 +107,11 @@ public class LogbackFactory {
         final ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<ILoggingEvent>();
         appender.setContext(context);
         appender.setLayout(formatter);
-        addThresholdFilter(appender, console.getThreshold());
         
         if( console.getFilters() != null )
         	addExtraFilters(appender, console.getFilters());
+
+        addThresholdFilter(appender, console.getThreshold());
         
         appender.start();
 
